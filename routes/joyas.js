@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../config/database");
 const getData = require('../consultas/consultas')
+const getError = require('../middleware/getError')
 
 // Ruta GET /joyas
-router.get("/joyas", getData)
+router.get("/joyas",getError, getData)
 
 // async (req, res) => {
 //   try {

@@ -3,20 +3,20 @@ const pool = require("../config/database");
 const getData = async(req,res)=>{
     try {
         const { limits = 10, page = 1, order_by = "id_ASC" } = req.query;
-        if (limits <= 0 || page <= 0) {
-          throw new Error("Valores de página o límite incorrectos");
-        }
+        // if (limits <= 0 || page <= 0) {
+        //   throw new Error("Valores de página o límite incorrectos");
+        // }
         const offset = (page - 1) * limits;
         const orderParams = order_by.split("_");
-        if (
-          orderParams.length !== 2 ||
-          !["id", "nombre", "categoria", "metal", "precio", "stock"].includes(
-            orderParams[0]
-          ) ||
-          !["ASC", "DESC"].includes(orderParams[1])
-        ) {
-          throw new Error("Parámetro order_by incorrecto");
-        }
+        // if (
+        //   orderParams.length !== 2 ||
+        //   !["id", "nombre", "categoria", "metal", "precio", "stock"].includes(
+        //     orderParams[0]
+        //   ) ||
+        //   !["ASC", "DESC"].includes(orderParams[1])
+        // ) {
+        //   throw new Error("Parámetro order_by incorrecto");
+        // }
         const orderByField = orderParams[0];
         const orderByDirection = orderParams[1];
         const query = {
