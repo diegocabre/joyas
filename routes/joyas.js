@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../config/database");
+const {getData} = require('../consultas/consultas');
+const {ckeckGet} = require('../middleware/getError');
+const {checkGetFilter}= require('../middleware/getError');
+const {getDataFilter} = require('../consultas/consultas');
 
 // Ruta GET /joyas
 router.get("/joyas", async (req, res) => {
@@ -19,7 +23,6 @@ router.get("/joyas", async (req, res) => {
       !["ASC", "DESC"].includes(orderParams[1])
     ) {
       throw new Error("Parámetro order_by incorrecto");
-      console.log(orderParams);
     }
     const orderByField = orderParams[0];
     const orderByDirection = orderParams[1];
@@ -53,33 +56,33 @@ router.get("/joyas", async (req, res) => {
 });
 
 // Ruta GET /joyas/filtros que implementa filtrado por precio, categoría y metal
-router.get("/joyas/filtros", async (req, res) => {
+router.get('/joyas/filtros', async (req, res) => {
   try {
     const { precio_max, precio_min, categoria, metal } = req.query;
     const filters = [];
     const values = [];
 
     if (precio_max) {
-      filters.push("precio <= $1");
+      filters.push('precio <= $1');
       values.push(precio_max);
     }
     if (precio_min) {
-      filters.push("precio >= $2");
+      filters.push('precio >= $2');
       values.push(precio_min);
     }
     if (categoria) {
-      filters.push("categoria = $3");
+      filters.push('categoria = $3');
       values.push(categoria);
     }
     if (metal) {
-      filters.push("metal = $4");
+      filters.push('metal = $4');
       values.push(metal);
     }
     if (filters.length === 0) {
-      throw new Error("Se deben proporcionar al menos un filtro");
+      throw new Error('Se deben proporcionar al menos un filtro');
     }
 
-    const whereClause = filters.join(" AND ");
+    const whereClause = filters.join(' AND ');
     const query = {
       text: `
         SELECT *
@@ -95,5 +98,6 @@ router.get("/joyas/filtros", async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
 
 module.exports = router;
